@@ -137,8 +137,8 @@ function fetchData(data,index){
                 +"<div id='"+data['id']+"' class='card-body collapse' data-parent='#accordion'>"
                 +"<div class='row'>"
                 +"<button class='btn btn-success mr-2' onclick='submitKehadiran(\""+data['id']+"\",\""+"Hadir"+"\")'>Hadir</button>"
-                +"<button class='btn btn-warning mr-2'>Sakit</button>"
-                +"<button class='btn btn-dark mr-2'>Dispensasi</button>"
+                +"<button class='btn btn-warning mr-2' onclick='submitKehadiran(\""+data['id']+"\",\""+"Sakit"+"\")'>Sakit</button>"
+                +"<button class='btn btn-dark mr-2'onclick='submitKehadiran(\""+data['id']+"\",\""+"Dispensasi"+"\")'>Dispensasi</button>"
                 +"</div>"
                 +"</div>"
               
