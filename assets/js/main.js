@@ -15,12 +15,15 @@ $(document).ready(function($) {
             
         });
 
+        
+
         // $.each(item['tugas'], function(index) {
         //     loopData(item['tugas'][index]);
 
         // });
 
     });
+
 
 
 });
@@ -59,7 +62,7 @@ function submitData(data) {
 
 
 function fetchData(data,index){
-	
+	var data_absensi ;
 	if(data_id.includes(data['id'])){
 
 		return;
@@ -73,15 +76,84 @@ function fetchData(data,index){
                     +"<td>"+data['mapel']+"</td>"
                     +"<td>"
                     	+"<button class='btn btn-sm btn-info' data-toggle='modal' onclick='getData(\""+data['id']+"\")' data-target='#editModal'>Edit</button>"
-                    	+'<button class="btn btn-sm btn-danger ml-1 btn-delete" id="btn-delete" data-id="'+data['id']+'" >Hapus</button>'
+                    	+"<button class='btn btn-sm btn-danger ml-1 btn-delete' onclick='deleteData(\""+data['id']+"\")' >Hapus</button>"
                     +'</td>'
                +"</tr>";
 
+        if("kehadiran" in data)
+        {
+            data_absensi = 
+        "<div id='accordion' class='accordion'>"
+            +"<div class='card mb-0'>"
+                +"<div class='card-header bg-primary text-light collapsed' data-toggle='collapse' href='#"+data['id']+"'>"
+                    +"<a class='card-title'>"
+                       +"<span> <b>"+data['kelas']+"</b>  </span>  <span class=' ml-5'>"+data['tanggal']+"</span> <span class=' ml-5'>"+data['mapel']+"</span>"  
+
+                    +"</a>"
+        
+                +"</div>"
+                +"<div id='"+data['id']+"' class='card-body collapse' data-parent='#accordion'>"
+                    +"<hr>"
+                        +"<li>"+data['kehadiran']['nama']+" <span class='ml-5'>"+data['kehadiran']['status']+"</span></li>"
+                    +"<hr>"
+                +"</div>"
+              
+            +"</div>"
+        +"</div>  <hr> ";
+
+        }else{
+
+          data_absensi =  "<div id='accordion' class='accordion'>"
+            +"<div class='card mb-0'>"
+                +"<div class='card-header bg-primary text-light collapsed' data-toggle='collapse' href='#"+data['id']+"'>"
+                    +"<a class='card-title'>"
+                       +"<span> <b>"+data['kelas']+"</b>  </span>  <span class=' ml-5'>"+data['tanggal']+"</span> <span class=' ml-5'>"+data['mapel']+"</span>"  
+
+                    +"</a>"
+        
+                +"</div>"
+                +"<div id='"+data['id']+"' class='card-body collapse' data-parent='#accordion'>"
+                    +"<hr>"
+                        +"<li>Tidak ada data</li>"
+                    +"<hr>"
+                +"</div>"
+              
+            +"</div>"
+        +"</div>  <hr> ";
+        }
+
+
+        
+         var absensi = 
+        "<div id='accordion' class='accordion'>"
+            +"<div class='card mb-0'>"
+                +"<div class='card-header bg-primary text-light collapsed' data-toggle='collapse' href='#"+data['id']+"'>"
+                    +"<a class='card-title'>"
+                       +"<span> <b>"+data['kelas']+"</b>  </span>  <span class=' ml-5'>"+data['tanggal']+"</span> <span class=' ml-5'>"+data['mapel']+"</span>"  
+
+                    +"</a>"
+        
+                +"</div>"
+                +"<div id='"+data['id']+"' class='card-body collapse' data-parent='#accordion'>"
+                +"<div class='row'>"
+                +"<button class='btn btn-success mr-2' onclick='submitKehadiran(\""+data['id']+"\",\""+"Hadir"+"\")'>Hadir</button>"
+                +"<button class='btn btn-warning mr-2'>Sakit</button>"
+                +"<button class='btn btn-dark mr-2'>Dispensasi</button>"
+                +"</div>"
+                +"</div>"
+              
+            +"</div>"
+        +"</div>  <hr> ";
+
 
    $('#table-body').append(html);
+   $('.list-jadwal').append(data_absensi);
+   $('.submit-kehadiran').append(absensi);
+
 
 	}
-	data_id.push(data['id']);
+    data_id.push(data['id']);
+    $('#total-jadwal').text(data_id.length);
 
 }
 
@@ -127,6 +199,30 @@ function updateData()
 
     firebase.database().ref('/absensi/' + _id).update(data);
 
+    window.location.reload();
+
+
+}
+
+function submitKehadiran(id,status)
+{
+    var data = {
+
+        kehadiran: {
+            nama : "siswa 1",
+            status : status,
+        }       
+    	
+    }
+
+    firebase.database().ref('/absensi/' + id).update(data);
+
+    window.location.reload();
+}
+
+function deleteData(id)
+{
+    firebase.database().ref('/absensi/' + id).remove();
     window.location.reload();
 
 
