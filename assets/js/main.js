@@ -23,6 +23,7 @@ $(document).ready(function($) {
         // });
 
     });
+   
 
 
 
@@ -41,7 +42,8 @@ $('#btn-submit').click(function(event) {
 
         tanggal: _tanggal,
         kelas: _kelas,
-        mapel: _mapel,        
+        mapel: _mapel,   
+             
         id: _id,
     }
     $('#_tanggal').val("");
@@ -62,7 +64,8 @@ function submitData(data) {
 
 
 function fetchData(data,index){
-	var data_absensi ;
+    var data_absensi ;
+    var status = ["Hadir","Sakit","Dispensasi"];
 	if(data_id.includes(data['id'])){
 
 		return;
@@ -148,7 +151,18 @@ function fetchData(data,index){
 
    $('#table-body').append(html);
    $('.list-jadwal').append(data_absensi);
-   $('.submit-kehadiran').append(absensi);
+
+   console.log($('.submit-kehadiran').children().length);
+
+   if(data['kehadiran'] == undefined){
+        $('.submit-kehadiran').append(absensi);
+   }
+   
+   if($('.submit-kehadiran').children().length == 0){
+    $('.submit-kehadiran').html('<center id="no-data">Tidak ada data / sudah di submit</center>');
+    }else{
+        $('#no-data').remove();
+    }
 
 
 	}
